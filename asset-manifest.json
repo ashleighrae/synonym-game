@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/synonym-game/static/css/main.0c72d2ba.css",
+    "main.js": "/synonym-game/static/js/main.e22a6dde.js",
+    "static/js/787.bf260e8d.chunk.js": "/synonym-game/static/js/787.bf260e8d.chunk.js",
+    "index.html": "/synonym-game/index.html",
+    "main.0c72d2ba.css.map": "/synonym-game/static/css/main.0c72d2ba.css.map",
+    "main.e22a6dde.js.map": "/synonym-game/static/js/main.e22a6dde.js.map",
+    "787.bf260e8d.chunk.js.map": "/synonym-game/static/js/787.bf260e8d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0c72d2ba.css",
+    "static/js/main.e22a6dde.js"
+  ]
+}
