@@ -29,6 +29,7 @@ function App() {
   function openPopup() {
     setIsOpen(true);
     setIsActive(false);
+    setGamesPlayed(prevGamesPlayed => prevGamesPlayed + 1);
   }
 
   function resetGame() {
@@ -58,16 +59,15 @@ function App() {
 
   function guessWord() {
     const currentGuesses = numberGuesses + 1;
+    const currentStreak = streak + 1;
     setNumberGuesses(currentGuesses);
 
     if (guessedWord === solutionWord) {
       setIsCorrectAnswer(true);
       openPopup();
-      setStreak(streak + 1);
-      setGamesPlayed(gamesPlayed + 1);
+      setStreak(currentStreak);
     } else if (currentGuesses >= 5) {
       openPopup();
-      setGamesPlayed(gamesPlayed + 1);
     }
   }
 
@@ -138,9 +138,7 @@ function App() {
       }, 1000);
     }
 
-    if (seconds <= 0) {
-      setIsActive(false);
-      setGamesPlayed(gamesPlayed + 1);
+    if (seconds === 0) {
       openPopup();
     }
 
