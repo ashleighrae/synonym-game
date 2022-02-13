@@ -140,6 +140,7 @@ function App() {
 
     if (seconds <= 0) {
       setIsActive(false);
+      setGamesPlayed(gamesPlayed + 1);
       openPopup();
     }
 
