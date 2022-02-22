@@ -2,6 +2,7 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import randomItem from 'random-item';
 import randomWords from 'random-words';
+import Loading from "./components/Loading";
 
 const wordAPI = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
@@ -14,7 +15,6 @@ function App() {
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
   const [randomWord, setRandomword] = useState("word");
   const [seconds, setSeconds] = useState(30);
-  const [isActive, setIsActive] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [streak, setStreak] = useState(0);
   const [gamesPlayed, setGamesPlayed] = useState(0);
@@ -28,8 +28,7 @@ function App() {
 
   function openPopup() {
     setIsOpen(true);
-    setIsActive(false);
-    setGamesPlayed(prevGamesPlayed => prevGamesPlayed + 1);
+    setWordFound(false);
   }
 
   function resetGame() {
@@ -37,9 +36,10 @@ function App() {
     setIsOpen(false);
     setNumberGuesses(0);
     setGuessedWord("");
+    setSolutionWord("");
     setIsCorrectAnswer(false);
     setSeconds(30);
-    setWordFound(false);
+    setGamesPlayed(prevGamesPlayed => prevGamesPlayed + 1);
 
     // Clear buttons
     const allButtons = document.getElementsByTagName('button');
@@ -50,11 +50,11 @@ function App() {
   }
 
   function typeLetter(letter) {
-    if (letter) setGuessedWord(guessedWord + letter);
+    if (letter && wordFound && guessedWord.length < 5) setGuessedWord(guessedWord + letter);
   }
 
   function backspaceLetter() {
-    setGuessedWord(guessedWord.slice(0, -1));
+    if (wordFound) setGuessedWord(guessedWord.slice(0, -1));
   }
 
   function guessWord() {
@@ -68,6 +68,8 @@ function App() {
       setStreak(currentStreak);
     } else if (currentGuesses >= 5) {
       openPopup();
+    } else {
+      
     }
   }
 
@@ -81,7 +83,6 @@ function App() {
 
   useEffect(() => {
     function setSolution(json_result) {
-      console.log("result " + json_result);
       const synList = [];
       json_result?.map(single_item => (
         single_item?.meanings.map(list => (
@@ -110,7 +111,6 @@ function App() {
         .then(res => res.json())
         .then(
           (result) => {
-            console.log("word " + wordLink);
             setSolution(result);
           },
           (error) => {
@@ -133,8 +133,7 @@ function App() {
 
   useEffect(() => {
     let interval = null;
-    setIsActive(true);
-    if (isActive) {
+    if (wordFound) {
       interval = setInterval(() => {
         setSeconds(seconds => seconds - 1);
       }, 1000);
@@ -145,124 +144,119 @@ function App() {
     }
 
     return () => clearInterval(interval);
-  }, [isActive, seconds]);
+  }, [wordFound, seconds]);
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  } else if (!isLoaded) {
-    return <div>Loading...</div>;
-  } else {
-    return (
-      <div>
-        {error && <div>Error: {error.message}</div>}
-        {!isLoaded && <div>Loading...</div>}
-        {!error && isLoaded &&
-          <div className="App">
-            <header className="App-header">
-              <div className="header-section-title">
-                <h1 className="app-header">Guessary.</h1>
-              </div>
-              <div className="header-section-button">
-                <button onClick={toggleAnalytics} className="analytics-button">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-5h2v5zm4 0h-2v-3h2v3zm0-5h-2v-2h2v2zm4 5h-2V7h2v10z" /></svg>
-                </button>
-              </div>
-            </header>
-
-            {isOpen &&
-              <div className='popup'>
-                <div className='popup_open'>
-                  {isCorrectAnswer &&
-                    <div>
-                      <h1>Correct!</h1>
-                      <p>You guessed the word <b>{solutionWord}</b>.</p>
-                      <button className="close" onClick={resetGame}>X</button>
-                    </div>}
-                  {!isCorrectAnswer &&
-                    <div>
-                      <h1>You lost.</h1>
-                      <p>The correct answer was <b>{solutionWord}</b>.</p>
-                      <button className="close" onClick={resetGame}>X</button>
-                    </div>}
-                </div>
-              </div>
-            }
-            <div className="game-info">
-              <div className="time-left">{seconds}s</div>
+  return (
+    <div>
+      {error && <div>Error: {error.message}</div>}
+      {!isLoaded && <Loading />}
+      {!error && isLoaded &&
+        <div className="App">
+          <header className="App-header">
+            <div className="header-section-title">
+              <h1 className="app-header">Guessary.</h1>
             </div>
-            {analyticsOpen &&
-              <div className='popup'>
-                <div className='popup_open'>
-                  <h1>ANALYTICS</h1>
-                  <div className="analytics-column">
-                    <p className="number-statistic"> {streak}</p>
-                    <p><b>GAMES WON</b></p>
-                  </div>
-                  <div className="analytics-column">
-                    <p className="number-statistic"> {gamesPlayed}</p>
-                    <p><b>GAMES PLAYED</b></p>
-                  </div>
-                  <button className="close" onClick={toggleAnalytics}>X</button>
-                </div>
+            <div className="header-section-button">
+              <button onClick={toggleAnalytics} className="analytics-button">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-5h2v5zm4 0h-2v-3h2v3zm0-5h-2v-2h2v2zm4 5h-2V7h2v10z" /></svg>
+              </button>
+            </div>
+          </header>
+
+          {isOpen &&
+            <div className='popup'>
+              <div className='popup_open'>
+                {isCorrectAnswer &&
+                  <div>
+                    <h1>Correct!</h1>
+                    <p>You guessed the word <b>{solutionWord}</b>.</p>
+                    <button className="close" onClick={resetGame}>X</button>
+                  </div>}
+                {!isCorrectAnswer &&
+                  <div>
+                    <h1>You lost.</h1>
+                    <p>The correct answer was <b>{solutionWord}</b>.</p>
+                    <button className="close" onClick={resetGame}>X</button>
+                  </div>}
               </div>
-            }
+            </div>
+          }
+          <div className="game-info">
+            <div className="time-left">00:{seconds > 9 ? seconds : "0" + seconds}</div>
+            <div>Guesses: {numberGuesses}/5</div>
+          </div>
+          {analyticsOpen &&
+            <div className='popup'>
+              <div className='popup_open'>
+                <h1>ANALYTICS</h1>
+                <div className="analytics-column">
+                  <p className="number-statistic"> {streak}</p>
+                  <p><b>GAMES WON</b></p>
+                </div>
+                <div className="analytics-column">
+                  <p className="number-statistic"> {gamesPlayed}</p>
+                  <p><b>GAMES PLAYED</b></p>
+                </div>
+                <button className="close" onClick={toggleAnalytics}>X</button>
+              </div>
+            </div>
+          }
+          <div>
             <div>
-              <div>
-                <p className="guess">
-                  {wordFound && guessedWord}
-                </p>
-                <p className="prompt">
-                  {randomWord}
-                </p>
+              <p className="guess">
+                {wordFound && guessedWord}
+              </p>
+              <p className="prompt">
+                {wordFound && randomWord}
+              </p>
+            </div>
+            <div id="keyboard">
+              <div className="row">
+                <button data-key="q" onClick={() => typeLetter("q")} onMouseOver={(e) => checkLetterInWord(e, "q")}>q</button>
+                <button data-key="w" onClick={() => typeLetter("w")} onMouseOver={(e) => checkLetterInWord(e, "w")}>w</button>
+                <button data-key="e" onClick={() => typeLetter("e")} onMouseOver={(e) => checkLetterInWord(e, "e")}>e</button>
+                <button data-key="r" onClick={() => typeLetter("r")} onMouseOver={(e) => checkLetterInWord(e, "r")}>r</button>
+                <button data-key="t" onClick={() => typeLetter("t")} onMouseOver={(e) => checkLetterInWord(e, "t")}>t</button>
+                <button data-key="y" onClick={() => typeLetter("y")} onMouseOver={(e) => checkLetterInWord(e, "y")}>y</button>
+                <button data-key="u" onClick={() => typeLetter("u")} onMouseOver={(e) => checkLetterInWord(e, "u")}>u</button>
+                <button data-key="i" onClick={() => typeLetter("i")} onMouseOver={(e) => checkLetterInWord(e, "i")}>i</button>
+                <button data-key="o" onClick={() => typeLetter("o")} onMouseOver={(e) => checkLetterInWord(e, "o")}>o</button>
+                <button data-key="p" onClick={() => typeLetter("p")} onMouseOver={(e) => checkLetterInWord(e, "p")}>p</button>
               </div>
-              <div id="keyboard">
-                <div className="row">
-                  <button data-key="q" onClick={() => typeLetter("q")} onMouseOver={(e) => checkLetterInWord(e, "q")}>q</button>
-                  <button data-key="w" onClick={() => typeLetter("w")} onMouseOver={(e) => checkLetterInWord(e, "w")}>w</button>
-                  <button data-key="e" onClick={() => typeLetter("e")} onMouseOver={(e) => checkLetterInWord(e, "e")}>e</button>
-                  <button data-key="r" onClick={() => typeLetter("r")} onMouseOver={(e) => checkLetterInWord(e, "r")}>r</button>
-                  <button data-key="t" onClick={() => typeLetter("t")} onMouseOver={(e) => checkLetterInWord(e, "t")}>t</button>
-                  <button data-key="y" onClick={() => typeLetter("y")} onMouseOver={(e) => checkLetterInWord(e, "y")}>y</button>
-                  <button data-key="u" onClick={() => typeLetter("u")} onMouseOver={(e) => checkLetterInWord(e, "u")}>u</button>
-                  <button data-key="i" onClick={() => typeLetter("i")} onMouseOver={(e) => checkLetterInWord(e, "i")}>i</button>
-                  <button data-key="o" onClick={() => typeLetter("o")} onMouseOver={(e) => checkLetterInWord(e, "o")}>o</button>
-                  <button data-key="p" onClick={() => typeLetter("p")} onMouseOver={(e) => checkLetterInWord(e, "p")}>p</button>
-                </div>
-                <div className="row">
-                  <div className="spacer half"></div>
-                  <button data-key="a" onClick={() => typeLetter("a")} onMouseOver={(e) => checkLetterInWord(e, "a")}>a</button>
-                  <button data-key="s" onClick={() => typeLetter("s")} onMouseOver={(e) => checkLetterInWord(e, "s")}>s</button>
-                  <button data-key="d" onClick={() => typeLetter("d")} onMouseOver={(e) => checkLetterInWord(e, "d")}>d</button>
-                  <button data-key="f" onClick={() => typeLetter("f")} onMouseOver={(e) => checkLetterInWord(e, "f")}>f</button>
-                  <button data-key="g" onClick={() => typeLetter("g")} onMouseOver={(e) => checkLetterInWord(e, "g")}>g</button>
-                  <button data-key="h" onClick={() => typeLetter("h")} onMouseOver={(e) => checkLetterInWord(e, "h")}>h</button>
-                  <button data-key="j" onClick={() => typeLetter("j")} onMouseOver={(e) => checkLetterInWord(e, "j")}>j</button>
-                  <button data-key="k" onClick={() => typeLetter("k")} onMouseOver={(e) => checkLetterInWord(e, "k")}>k</button>
-                  <button data-key="l" onClick={() => typeLetter("l")} onMouseOver={(e) => checkLetterInWord(e, "l")}>l</button>
-                  <div className="spacer half"></div>
-                </div>
-                <div className="row">
-                  <button data-key="↵" className="one-and-a-half" onClick={() => guessWord()}>
-                    enter
-                  </button>
-                  <button data-key="z" onClick={() => typeLetter("z")} onMouseOver={(e) => checkLetterInWord(e, "z")}>z</button>
-                  <button data-key="x" onClick={() => typeLetter("x")} onMouseOver={(e) => checkLetterInWord(e, "x")}>x</button>
-                  <button data-key="c" onClick={() => typeLetter("c")} onMouseOver={(e) => checkLetterInWord(e, "c")}>c</button>
-                  <button data-key="v" onClick={() => typeLetter("v")} onMouseOver={(e) => checkLetterInWord(e, "v")}>v</button>
-                  <button data-key="b" onClick={() => typeLetter("b")} onMouseOver={(e) => checkLetterInWord(e, "b")}>b</button>
-                  <button data-key="n" onClick={() => typeLetter("n")} onMouseOver={(e) => checkLetterInWord(e, "n")}>n</button>
-                  <button data-key="m" onClick={() => typeLetter("m")} onMouseOver={(e) => checkLetterInWord(e, "m")}>m</button>
-                  <button data-key="←" className="one-and-a-half" onClick={() => backspaceLetter()}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z" /></svg>
-                  </button>
-                </div>
+              <div className="row">
+                <div className="spacer half"></div>
+                <button data-key="a" onClick={() => typeLetter("a")} onMouseOver={(e) => checkLetterInWord(e, "a")}>a</button>
+                <button data-key="s" onClick={() => typeLetter("s")} onMouseOver={(e) => checkLetterInWord(e, "s")}>s</button>
+                <button data-key="d" onClick={() => typeLetter("d")} onMouseOver={(e) => checkLetterInWord(e, "d")}>d</button>
+                <button data-key="f" onClick={() => typeLetter("f")} onMouseOver={(e) => checkLetterInWord(e, "f")}>f</button>
+                <button data-key="g" onClick={() => typeLetter("g")} onMouseOver={(e) => checkLetterInWord(e, "g")}>g</button>
+                <button data-key="h" onClick={() => typeLetter("h")} onMouseOver={(e) => checkLetterInWord(e, "h")}>h</button>
+                <button data-key="j" onClick={() => typeLetter("j")} onMouseOver={(e) => checkLetterInWord(e, "j")}>j</button>
+                <button data-key="k" onClick={() => typeLetter("k")} onMouseOver={(e) => checkLetterInWord(e, "k")}>k</button>
+                <button data-key="l" onClick={() => typeLetter("l")} onMouseOver={(e) => checkLetterInWord(e, "l")}>l</button>
+                <div className="spacer half"></div>
+              </div>
+              <div className="row">
+                <button data-key="↵" className="one-and-a-half" onClick={() => guessWord()}>
+                  enter
+                </button>
+                <button data-key="z" onClick={() => typeLetter("z")} onMouseOver={(e) => checkLetterInWord(e, "z")}>z</button>
+                <button data-key="x" onClick={() => typeLetter("x")} onMouseOver={(e) => checkLetterInWord(e, "x")}>x</button>
+                <button data-key="c" onClick={() => typeLetter("c")} onMouseOver={(e) => checkLetterInWord(e, "c")}>c</button>
+                <button data-key="v" onClick={() => typeLetter("v")} onMouseOver={(e) => checkLetterInWord(e, "v")}>v</button>
+                <button data-key="b" onClick={() => typeLetter("b")} onMouseOver={(e) => checkLetterInWord(e, "b")}>b</button>
+                <button data-key="n" onClick={() => typeLetter("n")} onMouseOver={(e) => checkLetterInWord(e, "n")}>n</button>
+                <button data-key="m" onClick={() => typeLetter("m")} onMouseOver={(e) => checkLetterInWord(e, "m")}>m</button>
+                <button data-key="←" className="one-and-a-half" onClick={() => backspaceLetter()}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z" /></svg>
+                </button>
               </div>
             </div>
           </div>
-        }
-      </div>
-    );
-  }
+        </div>
+      }
+    </div>
+  );
 }
 
 export default App;
