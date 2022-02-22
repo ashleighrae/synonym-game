@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import randomItem from 'random-item';
 import randomWords from 'random-words';
 import Loading from "./components/Loading";
+import useKeypress from 'react-use-keypress';
 
 const wordAPI = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
@@ -21,6 +22,7 @@ function App() {
   const [isGameOver, setGameOver] = useState(true);
   const [wordFound, setWordFound] = useState(false);
   const [analyticsOpen, setAnalyticsOpen] = useState(false);
+  const keyboard = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'Enter', 'Backspace'];
 
   function toggleAnalytics() {
     setAnalyticsOpen(!analyticsOpen);
@@ -69,23 +71,34 @@ function App() {
     } else if (currentGuesses >= 5) {
       openPopup();
     } else {
-      
+
     }
   }
 
   function checkLetterInWord(event, letter) {
-    if (solutionWord.includes(letter)) {
+    if (solutionWord.includes(letter) && solutionWord) {
       event.target.className = 'in-word';
-    } else {
+    } else if (solutionWord) {
       event.target.className = 'not-in-word';
     }
   }
+
+  // Monitor keypress for guess, backspace and enter
+  useKeypress(keyboard, (event) => {
+    if (event.key === 'Enter') {
+      guessWord();
+    } else if (event.key === 'Backspace') {
+      backspaceLetter();
+    } else {
+      typeLetter(event.key);
+   }
+  });
 
   useEffect(() => {
     function setSolution(json_result) {
       const synList = [];
       json_result?.map(single_item => (
-        single_item?.meanings.map(list => (
+        single_item.meanings?.map(list => (
           list.definitions?.map(defs => (
             defs.synonyms?.map((syns) => (
               syns.length === 5 && syns.match(/[a-z]/i) ? synList.push(syns) : synList
