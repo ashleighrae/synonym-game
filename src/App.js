@@ -91,21 +91,24 @@ function App() {
       backspaceLetter();
     } else {
       typeLetter(event.key);
-   }
+    }
   });
 
   useEffect(() => {
     function setSolution(json_result) {
       const synList = [];
-      json_result?.map(single_item => (
-        single_item.meanings?.map(list => (
-          list.definitions?.map(defs => (
-            defs.synonyms?.map((syns) => (
-              syns.length === 5 && syns.match(/[a-z]/i) ? synList.push(syns) : synList
+      if (Array.isArray(json_result)) {
+        json_result?.map(single_item => (
+          single_item.meanings?.map(list => (
+            list.definitions?.map(defs => (
+              defs.synonyms?.map((syns) => (
+                syns.length === 5 && syns.match(/[a-z]/i) ? synList.push(syns) : synList
+              ))
             ))
           ))
-        ))
-      ));
+        ));
+      }
+
       if (synList.length > 0) {
         setSolutionWord(randomItem(synList));
         setIsLoaded(true);
@@ -215,13 +218,20 @@ function App() {
             </div>
           }
           <div>
-            <div>
+            <div className="guesses">
               <p className="guess">
                 {wordFound && guessedWord}
               </p>
               <p className="prompt">
                 {wordFound && randomWord}
               </p>
+              {!wordFound &&
+                <div className="dots">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              }
             </div>
             <div id="keyboard">
               <div className="row">

@@ -1,14 +1,14 @@
 import React from "react";
-import "./Loading.css";
+import "../App.css";
 
 function Loading() {
     return (
         <div className="centered">
-        <div className="dots">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+            <div className="dots">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
     );
 }

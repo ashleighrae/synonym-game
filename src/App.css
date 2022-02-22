@@ -187,3 +187,57 @@ button {
   color: rgb(131, 129, 129) !important;
   cursor: auto !important;
 }
+
+/* Loading */
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.dots {
+  width: 10em;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.guesses .dots {
+  width: 4em;
+  margin: auto;
+  padding: 1.5em;
+}
+
+.dots div {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #fc2f70;
+  animation: fade 0.8s ease-in-out alternate infinite;
+}
+
+.guesses .dots div {
+  width: 1em;
+  height: 1em;
+}
+
+.dots div:nth-of-type(1) {
+  animation-delay: -0.4s;
+}
+
+.dots div:nth-of-type(2) {
+  animation-delay: -0.2s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
