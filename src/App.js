@@ -80,12 +80,13 @@ function App() {
   }
 
   useEffect(() => {
-    function setSolution(items) {
+    function setSolution(json_result) {
+      console.log("result " + json_result);
       const synList = [];
-      items.map(item => (
-        item.meanings.map(list => (
-          list.definitions.map(defs => (
-            defs.synonyms.map((syns) => (
+      json_result?.map(single_item => (
+        single_item?.meanings.map(list => (
+          list.definitions?.map(defs => (
+            defs.synonyms?.map((syns) => (
               syns.length === 5 && syns.match(/[a-z]/i) ? synList.push(syns) : synList
             ))
           ))
@@ -109,6 +110,7 @@ function App() {
         .then(res => res.json())
         .then(
           (result) => {
+            console.log("word " + wordLink);
             setSolution(result);
           },
           (error) => {
