@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/synonym-game/static/css/main.70a419ed.css",
-    "main.js": "/synonym-game/static/js/main.b4b32308.js",
+    "main.css": "/synonym-game/static/css/main.257e9e27.css",
+    "main.js": "/synonym-game/static/js/main.53cac55a.js",
     "static/js/787.bf260e8d.chunk.js": "/synonym-game/static/js/787.bf260e8d.chunk.js",
     "index.html": "/synonym-game/index.html",
-    "main.70a419ed.css.map": "/synonym-game/static/css/main.70a419ed.css.map",
-    "main.b4b32308.js.map": "/synonym-game/static/js/main.b4b32308.js.map",
+    "main.257e9e27.css.map": "/synonym-game/static/css/main.257e9e27.css.map",
+    "main.53cac55a.js.map": "/synonym-game/static/js/main.53cac55a.js.map",
     "787.bf260e8d.chunk.js.map": "/synonym-game/static/js/787.bf260e8d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.70a419ed.css",
-    "static/js/main.b4b32308.js"
+    "static/css/main.257e9e27.css",
+    "static/js/main.53cac55a.js"
   ]
 }
