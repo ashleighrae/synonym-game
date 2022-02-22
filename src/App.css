@@ -5,6 +5,7 @@
 }
 
 header {
+  margin-top: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -150,6 +151,7 @@ button {
 .popup h1 {
   color: #ce1122;
   margin-bottom: 0;
+  font-size: 1.5em;
 }
 
 .number-statistic {
@@ -240,4 +242,31 @@ button {
     opacity: 0;
   }
 }
+
+@media screen and (max-width: 900px) {
+  .row {
+    margin: 0 auto 2px;
+    width: 95%;
+  }
+
+  #keyboard button {
+    border-radius: 8px;
+    padding: 2px;
+    font-size: 12px;
+    margin: 0 2px 0 0;
+    height: 40px;
+  }
+
+  .close {
+    font-size: 20px;
+  }
+
+  .popup h1 {
+    color: #ce1122;
+    margin-bottom: 0;
+    font-size: 1em;
+    padding-top: 0.6em;
+  }
+}
+
 
