@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+# 🧠 Guesssary
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Guesssary** is a playful synonym guessing game inspired by Wordle — originally built by Ashleigh-Rae O’Neill during COVID-19 for her partner, who was obsessed with word games. Designed to be fun, challenging, and interactive, the game brings a fresh twist to vocabulary learning.
 
-## Available Scripts
+🕹️ Play it here: [https://ashleighrae.github.io/synonym-game/](https://ashleighrae.github.io/synonym-game/)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🎮 How to Play
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Hover or move your mouse** over the on-screen keyboard to reveal which letters you need to use.
+2. **Read the hint**, which is a synonym of a hidden 4–5 letter word.
+3. **Type your guess** using the on-screen keys or your physical keyboard.
+4. You have **5 guesses** to get the correct word.
+5. Letters that aren’t in the word will be marked in red.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## ✨ Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Built with **React**
+- Interactive, mouse-driven keyboard
+- Hints based on synonyms
+- Minimalist design for focus
+- Real-time feedback on wrong guesses
+- Fully playable in the browser
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🔧 Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **React**
+- **CSS Modules**
+- Hosted via **GitHub Pages**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 📜 Origin Story
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Ashleigh-Rae created Guesssary during a quiet COVID lockdown moment — part boredom, part inspiration from daily Wordle matches with her partner. The result? A browser game designed to entertain and challenge with just the right dose of word-nerdery.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📄 License
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This project is licensed under the [MIT License](LICENSE).
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Made with 💡 by **Ashleigh-Rae O’Neill**
